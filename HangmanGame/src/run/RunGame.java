@@ -4,7 +4,7 @@ public class RunGame {
 
 	public static void main(String[] args) {
 	
-		System.out.print("HangManGame");
+		System.out.print("HangmanGame");
 	}
 
 }
