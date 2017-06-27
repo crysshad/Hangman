@@ -36,12 +36,12 @@ public class PickWord extends HangmanLogic {
 			else {
 
 				System.out.println("Please enter one of the selection shown on the list above");
-				match =false;
+				match = false;
 			}
 			
 		}
 		
-		while (match = false);
+		while (match == false);
 		
 		
 		
