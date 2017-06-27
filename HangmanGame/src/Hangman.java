@@ -22,7 +22,14 @@ public class Hangman {
 
 	    
 	    pw.pickCategory();
-
+	    
+	    String word = pw.getWord();
+	    
+	    System.out.print(word);
+	   
+	    
+	    
+	   
 	}
 
 }
