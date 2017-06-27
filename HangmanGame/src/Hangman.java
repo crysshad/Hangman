@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.regex.PatternSyntaxException;
+
 import hangManGame.HangmanLogic;
 import hangManGame.PickWord;
 
@@ -26,9 +29,9 @@ public class Hangman {
 	    String word = pw.getWord();
 	    
 	    System.out.print(word);
-	   
-	    
-	    
+	  
+	    String[] wordArray = word.split("(?!^)");
+	    System.out.println(Arrays.toString(wordArray));
 	   
 	}
 
