@@ -1,6 +1,7 @@
 package hangManGame;
 
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 
 public class PickWord extends HangmanLogic {
@@ -42,20 +43,37 @@ public class PickWord extends HangmanLogic {
 		}
 
 		while (match == false);
-
 		
+		 Random random = new Random();
+		 
+		 String fruitWordSelected = "apple";
+		 String clothingWordSelected = "shoe";
+		//retrieve a list of words based on the category selected
 		  if (userCategorySelection.equals("fruit")){
 		  
 			  String fruitList[]=super.fruit;
 			  System.out.println("Category" + Arrays.toString(fruitList));
+			  
+			 
+			  int fruitIndex = random.nextInt(fruitList.length);
+			  System.out.println(fruitList[fruitIndex]);
+			  
+			  fruitWordSelected = fruitList[fruitIndex];
 		  }
 		  
 		 else{
 			 
 			 String clothingItemList[]=super.clothingItem;
 			 System.out.println("Category" + Arrays.toString(clothingItemList));
+			 
+			 int clothingIndex = random.nextInt(clothingItemList.length);
+			  System.out.println(clothingItemList[clothingIndex]);
+			  clothingWordSelected = clothingItemList[clothingIndex];
 		 }
 		
+		  
+		  System.out.println(fruitWordSelected);
+		  System.out.println(clothingWordSelected);
 
 		return "Fruit";
 	}
