@@ -11,30 +11,33 @@ public class HangmanGameLogic extends HangmanCategory {
 	public String[] wordArray;
 	public int wordSize;
 
-	// Variable in prompt()
+	// Variable in prompt(), checkGuessedLetter, alreadyGuessed(),stillHasChance
 	public char userEnter;
 	public String guessedLetter;
 	public int maxNumOftries = 5;
 	public char[] badGuessedLetter = new char[maxNumOftries];
 	public int numOfBadGuess;
-	public int numOfTriesLeft;
+	public int numOfTriesLeft = maxNumOftries;
 	public int numOfGoodGuess;
 	public char[] alreadyGuessedCorrectLetter;
-	public String[] alreadyGuessedLetter;
 	public int index = 0;
 	String userEnterString;
+	public String[] alreadyGuessedLetter;
 
+	/******************************************************************************
+	 * Select a random word
+	 *******************************************************************************/
 	public String pickWord() {
 
-		/******************************************************************************
+		/*
 		 * show user the possible selections
-		 *******************************************************************************/
+		 */
 
 		System.out.println("Category" + Arrays.toString(super.category));
 
-		/******************************************************************************
+		/*
 		 * ask user to select a category
-		 *******************************************************************************/
+		 */
 
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Enter the category you want to select: ");
@@ -42,12 +45,13 @@ public class HangmanGameLogic extends HangmanCategory {
 
 		boolean match = false;
 
+		/*
+		 * check if the user selection matches a category selection then output
+		 * the category otherwise ask user to retry
+		 */
+
 		do {
 
-			/*
-			 * if the user selection matches a category selection then output
-			 * the category otherwise ask user to retry
-			 */
 			if (userCategorySelection.equals(super.category[0]) || userCategorySelection.equals(super.category[1])) {
 
 				System.out.println("You have chosen" + " " + userCategorySelection);
@@ -67,11 +71,11 @@ public class HangmanGameLogic extends HangmanCategory {
 
 		while (match == false);
 
-		/******************************************************************************
+		/*
 		 * Randomly select a word from the category selected by the user Store
 		 * the word in category fruit in fruitWordSelected Store the word in
 		 * category clothingItem in clothingWordSelected
-		 *******************************************************************************/
+		 **/
 
 		Random random = new Random();
 
@@ -96,12 +100,21 @@ public class HangmanGameLogic extends HangmanCategory {
 			wordSelected = clothingItemList[clothingIndex];
 		}
 
+		// Convert String wordSelected to a String array
 		wordArray = wordSelected.split("(?!^)");
 		System.out.println("The choosen word array is " + Arrays.toString(wordArray));
 
+		// Set the size of the wordArray to "wordSize"
 		wordSize = wordArray.length;
 
+		/*
+		 * Now I know the size of the wordArray, I can set the size of the
+		 * alreadyGuessedCorrectLetter array otherwise I will run into a null
+		 * pointer exception in checkGuessedLetter()
+		 */
 		alreadyGuessedCorrectLetter = new char[wordSize];
+
+		// Set the size of alreadyGuessedLetter to selected word size + 5
 
 		alreadyGuessedLetter = new String[wordSize + maxNumOftries];
 		System.out.println("It is a " + wordSize + " letter word");
@@ -111,7 +124,7 @@ public class HangmanGameLogic extends HangmanCategory {
 	}
 
 	/******************************************************************************
-	 * Ask user to enter a letter
+	 * Ask user to enter a letter until win or lose the game
 	 *******************************************************************************/
 
 	public char prompt() {
@@ -119,13 +132,25 @@ public class HangmanGameLogic extends HangmanCategory {
 		do {
 
 			Scanner scan = new Scanner(System.in);
+			// Ask user to enter a letter
 			System.out.println("Enter a letter ");
+
+			// Set char userEnter to the first character of user entered string
 			userEnter = scan.nextLine().charAt(0);
+			/*
+			 * Save the userEnter character in a String variable so I can use
+			 * Arrays.asList(array).contains(x) in later methods
+			 */
 			userEnterString = String.valueOf(userEnter);
 			System.out.println("User entered " + userEnter);
 
+			// Check if user entered letter is good or bad guess
 			checkGuessedLetter(alreadyGuessedCorrectLetter, alreadyGuessedLetter);
 
+			/*
+			 * Determine if the user win or lost the game based of return value
+			 * of stillHasChance()
+			 */
 			if (numOfGoodGuess == wordSize) {
 
 				System.out.println("You did it ^-^ !");
@@ -147,14 +172,15 @@ public class HangmanGameLogic extends HangmanCategory {
 	}
 
 	/******************************************************************************
-	 * Save the letter in an array of size 5
+	 * Check of the user entered letter matches the letter in the
+	 * alreadyGuessedLetter String array if so, inform user the letter is
+	 * already guessed
 	 *******************************************************************************/
 	public boolean alreadyGuessed(String[] alreadyGuessedLetter) {
 
 		if (Arrays.asList(alreadyGuessedLetter).contains(userEnterString)) {
 
 			System.out.println("Letter already guessed");
-			System.out.println("Enter a letter");
 
 			return true;
 		}
@@ -162,8 +188,18 @@ public class HangmanGameLogic extends HangmanCategory {
 		return false;
 	}
 
+	/******************************************************************************
+	 * Check if the user enter letter match the letters in the wordArray
+	 *******************************************************************************/
 	public char checkGuessedLetter(char[] correctGuessedLetter, String[] alreadyGuessedLetter) {
 
+		// Need to add the occurrences and the index of the user enter letter
+
+		/*
+		 * If the user entered letter exist in the word array then store the
+		 * userEnter value in correctGuessedLetter Char array and increment the
+		 * numOfGoodGuess
+		 */
 		if (Arrays.asList(wordArray).contains(userEnterString) && alreadyGuessed(alreadyGuessedLetter) == false) {
 
 			System.out.println(
@@ -171,11 +207,16 @@ public class HangmanGameLogic extends HangmanCategory {
 
 			correctGuessedLetter[Arrays.asList(wordArray).indexOf(userEnterString)] = userEnter;
 			System.out.println("Print the correct guessed char " + Arrays.toString(correctGuessedLetter));
-			numOfTriesLeft = 1;
+
 			numOfGoodGuess++;
 
 		}
 
+		/*
+		 * If the user entered letter does not exist in the word array then
+		 * store the userEnter value in badGuessedLetter Char array and
+		 * increment the numOfBadGuess and decrease the numOfTriesLeft count
+		 */
 		if (!Arrays.asList(wordArray).contains(userEnterString) && alreadyGuessed(alreadyGuessedLetter) == false) {
 
 			badGuessedLetter[numOfBadGuess] = userEnter;
@@ -185,6 +226,8 @@ public class HangmanGameLogic extends HangmanCategory {
 
 		}
 
+		// Add each guessed letter (good and bad) in a char array for
+		// alreadyGuessed()
 		alreadyGuessedLetter[index] = userEnterString;
 		index++;
 		;
