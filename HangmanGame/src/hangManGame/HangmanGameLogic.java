@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
-public class PickWord extends HangmanCategory {
+public class HangmanGameLogic extends HangmanCategory {
 
 	// Variables in pickWord()
 	public String wordSelected = "";
