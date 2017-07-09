@@ -12,7 +12,7 @@ public class HangmanGameLogic extends HangmanCategory {
 	public int wordSize;
 
 	// Variable in prompt()
-	public String userEnter;
+	public char userEnter;
 	public String guessedLetter;
 	public int maxNumOftries = 5;
 	public String[] badGuessedLetter = new String[maxNumOftries];
@@ -107,13 +107,14 @@ public class HangmanGameLogic extends HangmanCategory {
 	 * Ask user to enter a letter
 	 *******************************************************************************/
 
-	public String prompt() {
+	public char prompt() {
 
 		do {
 
 			Scanner scan = new Scanner(System.in);
 			System.out.println("Enter a letter ");
-			userEnter = scan.next();
+			userEnter = scan.nextLine().charAt(0);
+			
 			System.out.println("User entered " + userEnter);
 
 			checkGuessedLetter();
@@ -142,15 +143,18 @@ public class HangmanGameLogic extends HangmanCategory {
 	 * Save the letter in an array of size 5
 	 *******************************************************************************/
 
-	public String checkGuessedLetter() {
+	public char checkGuessedLetter() {
 
-		if (Arrays.asList(wordArray).contains(userEnter)) {
+		
+		String userEnterString = String.valueOf(userEnter);
+		
+		if (Arrays.asList(wordArray).contains(userEnterString)) {
 
 			String[] correctGuessedLetter = new String[wordSize];
 
-			System.out.println("Print the correct guessed char index" + Arrays.asList(wordArray).indexOf(userEnter));
+			System.out.println("Print the correct guessed char index" + Arrays.asList(wordArray).indexOf(userEnterString));
 
-			correctGuessedLetter[Arrays.asList(wordArray).indexOf(userEnter)] = userEnter;
+			correctGuessedLetter[Arrays.asList(wordArray).indexOf(userEnterString)] = userEnterString;
 			System.out.println("Print the correct guessed char " + Arrays.toString(correctGuessedLetter));
 			numOfTriesLeft = 1;
 			numOfGoodGuess++;
@@ -158,24 +162,11 @@ public class HangmanGameLogic extends HangmanCategory {
 
 		}
 		
-		
-		/*if (Arrays.asList(wordArray).contains(userEnter)) {
 
-			String[] correctGuessedLetter = new String[wordSize];
 
-			System.out.println("Print the correct guessed char index" + Arrays.asList(wordArray).indexOf(userEnter));
+		if (!Arrays.asList(wordArray).contains(userEnterString)) {
 
-			correctGuessedLetter[Arrays.asList(wordArray).indexOf(userEnter)] = userEnter;
-			System.out.println("Print the correct guessed char " + Arrays.toString(correctGuessedLetter));
-			numOfTriesLeft = 1;
-			numOfGoodGuess++;
-			
-
-		}*/
-
-		if (!Arrays.asList(wordArray).contains(userEnter)) {
-
-			badGuessedLetter[numOfBadGuess] = userEnter;
+			badGuessedLetter[numOfBadGuess] = userEnterString;
 			System.out.println("Print the bad guessed char " + Arrays.toString(badGuessedLetter));
 			numOfBadGuess++;
 			numOfTriesLeft = badGuessedLetter.length - numOfBadGuess;
