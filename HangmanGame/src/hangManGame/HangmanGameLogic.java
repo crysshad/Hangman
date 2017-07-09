@@ -20,7 +20,9 @@ public class HangmanGameLogic extends HangmanCategory {
 	public int numOfTriesLeft;
 	public int numOfGoodGuess;
 	public char[] alreadyGuessedCorrectLetter;
-	
+	public String[] alreadyGuessedLetter;
+	public int index = 0;
+	String userEnterString;
 
 	public String pickWord() {
 
@@ -98,8 +100,10 @@ public class HangmanGameLogic extends HangmanCategory {
 		System.out.println("The choosen word array is " + Arrays.toString(wordArray));
 
 		wordSize = wordArray.length;
-		
+
 		alreadyGuessedCorrectLetter = new char[wordSize];
+
+		alreadyGuessedLetter = new String[wordSize + maxNumOftries];
 		System.out.println("It is a " + wordSize + " letter word");
 
 		return wordSelected;
@@ -117,10 +121,10 @@ public class HangmanGameLogic extends HangmanCategory {
 			Scanner scan = new Scanner(System.in);
 			System.out.println("Enter a letter ");
 			userEnter = scan.nextLine().charAt(0);
-
+			userEnterString = String.valueOf(userEnter);
 			System.out.println("User entered " + userEnter);
 
-			checkGuessedLetter(alreadyGuessedCorrectLetter);
+			checkGuessedLetter(alreadyGuessedCorrectLetter, alreadyGuessedLetter);
 
 			if (numOfGoodGuess == wordSize) {
 
@@ -135,7 +139,7 @@ public class HangmanGameLogic extends HangmanCategory {
 			}
 
 			System.out.println("number of tries " + numOfTriesLeft);
-			
+
 		}
 
 		while (stillHasChance() == true);
@@ -145,13 +149,22 @@ public class HangmanGameLogic extends HangmanCategory {
 	/******************************************************************************
 	 * Save the letter in an array of size 5
 	 *******************************************************************************/
-	
-	public char checkGuessedLetter(char[] correctGuessedLetter) {
+	public boolean alreadyGuessed(String[] alreadyGuessedLetter) {
 
-		
-		String userEnterString = String.valueOf(userEnter);
+		if (Arrays.asList(alreadyGuessedLetter).contains(userEnterString)) {
 
-		if (Arrays.asList(wordArray).contains(userEnterString)) {
+			System.out.println("Letter already guessed");
+			System.out.println("Enter a letter");
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public char checkGuessedLetter(char[] correctGuessedLetter, String[] alreadyGuessedLetter) {
+
+		if (Arrays.asList(wordArray).contains(userEnterString) && alreadyGuessed(alreadyGuessedLetter) == false) {
 
 			System.out.println(
 					"Print the correct guessed char index" + Arrays.asList(wordArray).indexOf(userEnterString));
@@ -160,12 +173,10 @@ public class HangmanGameLogic extends HangmanCategory {
 			System.out.println("Print the correct guessed char " + Arrays.toString(correctGuessedLetter));
 			numOfTriesLeft = 1;
 			numOfGoodGuess++;
-			
-			
-			
+
 		}
 
-		if (!Arrays.asList(wordArray).contains(userEnterString)) {
+		if (!Arrays.asList(wordArray).contains(userEnterString) && alreadyGuessed(alreadyGuessedLetter) == false) {
 
 			badGuessedLetter[numOfBadGuess] = userEnter;
 			System.out.println("Print the bad guessed char " + Arrays.toString(badGuessedLetter));
@@ -174,6 +185,8 @@ public class HangmanGameLogic extends HangmanCategory {
 
 		}
 
+		alreadyGuessedLetter[index] = userEnterString;
+		index++;
 		;
 
 		return userEnter;
