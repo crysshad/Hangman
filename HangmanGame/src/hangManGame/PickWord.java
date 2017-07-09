@@ -4,11 +4,24 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
-public class PickWord extends HangmanLogic {
+public class PickWord extends HangmanCategory {
 
-	String wordSelected = "";
+	// Variables in pickWord()
+	public String wordSelected = "";
+	public String[] wordArray;
+	public int wordSize;
 
-	public String pickCategory() {
+	// Variable in prompt()
+	public String userEnter;
+	public String guessedLetter;
+	public int maxNumOftries = 5;
+	public String[] badGuessedLetter = new String[maxNumOftries];
+	public int numOfBadGuess;
+	public int numOfTriesLeft;
+	public int numOfGoodGuess;
+	String wrongInput;
+
+	public String pickWord() {
 
 		/******************************************************************************
 		 * show user the possible selections
@@ -59,8 +72,6 @@ public class PickWord extends HangmanLogic {
 
 		Random random = new Random();
 
-		this.wordSelected = wordSelected;
-
 		if (userCategorySelection.equals("fruit")) {
 
 			String fruitList[] = super.fruit;
@@ -82,21 +93,112 @@ public class PickWord extends HangmanLogic {
 			wordSelected = clothingItemList[clothingIndex];
 		}
 
-		return "Fruit";
+		wordArray = wordSelected.split("(?!^)");
+		System.out.println(Arrays.toString(wordArray));
+
+		wordSize = wordArray.length;
+		System.out.println("It is a " + wordSize + " letter word");
+
+		return wordSelected;
+
 	}
 
 	/******************************************************************************
-	 * Getter and Setter
+	 * Ask user to enter a letter
 	 *******************************************************************************/
 
-	public void settWord(String fw) {
+	public String prompt() {
 
-		this.wordSelected = fw;
+		do {
+
+			Scanner scan = new Scanner(System.in);
+			System.out.println("Enter a letter ");
+			userEnter = scan.next();
+			System.out.println(userEnter);
+
+			if (userEnter.length() > 1) {
+
+				System.out.println("Please enter only 1 letter");
+			}
+
+			checkGuessedLetter();
+
+			if (numOfGoodGuess == wordSize) {
+
+				System.out.println("You did it ^-^ !");
+
+			}
+
+			if (numOfTriesLeft == 0) {
+
+				System.out.println("Go home -_- ");
+				
+			
+			}
+
+			System.out.println(numOfTriesLeft);
+
+		}
+
+		while (stillHasChance() == true);
+		return userEnter;
 	}
 
-	public String getWord() {
+	/******************************************************************************
+	 * Save the letter in an array of size 5
+	 *******************************************************************************/
 
-		return wordSelected;
+	public String checkGuessedLetter() {
+
+		if (Arrays.asList(wordArray).contains(userEnter) && userEnter.length() == 1) {
+
+			String[] correctGuessedLetter = new String[wordSize];
+
+			System.out.println(Arrays.asList(wordArray).indexOf(userEnter));
+
+			correctGuessedLetter[Arrays.asList(wordArray).indexOf(userEnter)] = userEnter;
+			System.out.println(Arrays.toString(correctGuessedLetter));
+			numOfGoodGuess++;
+
+		}
+
+		if (!Arrays.asList(wordArray).contains(userEnter) && userEnter.length() == 1) {
+
+			badGuessedLetter[numOfBadGuess] = userEnter;
+			System.out.println(Arrays.toString(badGuessedLetter));
+			numOfBadGuess++;
+			numOfTriesLeft = badGuessedLetter.length - numOfBadGuess;
+
+		}
+
+		else {
+			numOfTriesLeft = 1;
+			wrongInput = "wrongInput";
+		}
+		
+	
+		;
+
+		return userEnter;
+
+	}
+
+	public boolean stillHasChance() {
+
+		if (numOfTriesLeft == 0) {
+
+			return false;
+		}
+
+		if (wrongInput == "wrongInput") {
+
+			return true;
+		}
+
+		else {
+
+			return true;
+		}
 
 	}
 

@@ -1,6 +1,6 @@
 package hangManGame;
 
-public class HangmanLogic {
+public class HangmanCategory {
 
 	
 	String category[]={"fruit","clothingItem"};
