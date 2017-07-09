@@ -116,27 +116,21 @@ public class HangmanGameLogic extends HangmanCategory {
 			userEnter = scan.next();
 			System.out.println(userEnter);
 
-			if (userEnter.length() > 1) {
-
-				System.out.println("Please enter only 1 letter");
-			}
-
 			checkGuessedLetter();
 
 			if (numOfGoodGuess == wordSize) {
 
+				numOfTriesLeft = 0;
 				System.out.println("You did it ^-^ !");
 
 			}
 
-			if (numOfTriesLeft == 0) {
+			if (numOfTriesLeft == 0 && numOfGoodGuess != wordSize) {
 
 				System.out.println("Go home -_- ");
-				
-			
+
 			}
 
-			System.out.println(numOfTriesLeft);
 
 		}
 
@@ -150,19 +144,18 @@ public class HangmanGameLogic extends HangmanCategory {
 
 	public String checkGuessedLetter() {
 
-		if (Arrays.asList(wordArray).contains(userEnter) && userEnter.length() == 1) {
+		if (Arrays.asList(wordArray).contains(userEnter)) {
 
 			String[] correctGuessedLetter = new String[wordSize];
-
-			System.out.println(Arrays.asList(wordArray).indexOf(userEnter));
 
 			correctGuessedLetter[Arrays.asList(wordArray).indexOf(userEnter)] = userEnter;
 			System.out.println(Arrays.toString(correctGuessedLetter));
 			numOfGoodGuess++;
+			
 
 		}
 
-		if (!Arrays.asList(wordArray).contains(userEnter) && userEnter.length() == 1) {
+		else {
 
 			badGuessedLetter[numOfBadGuess] = userEnter;
 			System.out.println(Arrays.toString(badGuessedLetter));
@@ -171,12 +164,6 @@ public class HangmanGameLogic extends HangmanCategory {
 
 		}
 
-		else {
-			numOfTriesLeft = 1;
-			wrongInput = "wrongInput";
-		}
-		
-	
 		;
 
 		return userEnter;
@@ -188,11 +175,6 @@ public class HangmanGameLogic extends HangmanCategory {
 		if (numOfTriesLeft == 0) {
 
 			return false;
-		}
-
-		if (wrongInput == "wrongInput") {
-
-			return true;
 		}
 
 		else {
